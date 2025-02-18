@@ -1,35 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+
+import { YoutubeTranscript } from "youtube-transcript";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [youtubeURL, setYoutubeURL] = useState("");
+  const [videoId, setVideoId] = useState("");
+  const [subtitles, setSubtitles] = useState("");
+
+  const getSubtitles = async () => {
+    const transcript = await YoutubeTranscript.fetchTranscript("4c0xpAsTtJM");
+    setSubtitles(transcript.map((t) => t.text).join(" "));
+  };
+
+  const handleYoutubeUrl = (url: string) => {
+    const videoId = url.split("v=")[1];
+    setVideoId(videoId);
+  };
+
+  const handleSubmit = () => {
+    handleYoutubeUrl(youtubeURL);
+    console.log(videoId);
+    getSubtitles();
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="p-5 max-w-lg mx-auto">
+      <h2>Obtener subtítulos de YouTube</h2>
+      <input
+        type="text"
+        placeholder="Ingresa el ID del video"
+        value={youtubeURL}
+        onChange={(e) => setYoutubeURL(e.target.value)}
+        className="w-full p-2.5 mb-2.5"
+      />
+      <button onClick={handleSubmit} className="w-full p-2.5">
+        Obtener Subtítulos
+      </button>
+      <pre className="whitespace-pre-wrap mt-5">{subtitles}</pre>
+    </div>
+  );
 }
 
-export default App
+export default App;
