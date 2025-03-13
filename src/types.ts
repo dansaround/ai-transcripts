@@ -1,5 +1,5 @@
-export interface YouTubeCaptionInterface  {
-  kind: 'youtube#caption';
+export interface CaptionInterface  {
+  kind: string;
   etag: string;
   id: string;
   snippet: {
@@ -27,5 +27,5 @@ export interface CaptionTrack {
 }
 
 export interface CaptionsResponse {
-  items: CaptionTrack[];
+  items: CaptionInterface[];
 }
